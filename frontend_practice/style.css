@@ -1,0 +1,19 @@
+        tr{
+            border: 1px black solid
+        }
+        th {
+            border: 1px red solid;
+            width: 200px;
+        }
+        body{
+            background-color: blue;
+        }
+        p#lightpink{
+            background-color: lightpink;
+        }
+        td#lightpin{
+            background-color: lightpink;
+        }
+        td#lightpin{
+            background-color: lightpink;
+        }
