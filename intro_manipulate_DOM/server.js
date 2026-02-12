@@ -7,36 +7,36 @@
 
 // mongoose
 //   .connect(process.env.MONGODB_URI)
-//   .then(() => console.log("✅ MongoDB connected"))
-//   .catch((err) => console.error("❌ MongoDB error:", err));
+//   .then(() => console.log(" MongoDB connected"))
+//   .catch((err) => console.error(" MongoDB error:", err));
 
 // app.get("/", (req, res) => {
 //   res.send("Backend is running");
 // });
 
 // const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => console.log("✅ Server on port", PORT));
-require("dotenv").config();
+// app.listen(PORT, () => console.log(" Server on port", PORT));
+require("dotenv").config(); //loades varss from env
 
-const express = require("express");
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
+const express = require("express"); //import stuf
+const mongoose = require("mongoose"); // import stuff
+const bcrypt = require("bcrypt"); //import stuff
 
 const app = express();
 
-// Serve frontend files (index.html, app.js, style.css)
+// frontend stuff, all in publiic
 app.use(express.static("public"));
 
-// Parse JSON for fetch() requests
+// does ftch req from frontend
 app.use(express.json());
 
-// Connect MongoDB
+// Connect MongoDBx
 mongoose
   .connect(process.env.MONGODB_URI)
-  .then(() => console.log("✅ MongoDB connected"))
-  .catch((err) => console.error("❌ MongoDB error:", err));
+  .then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB error:", err));
 
-// Schema (keep in server.js for now to move fast)
+// Schema ->- structure of the docs in mongo
 const userSchema = new mongoose.Schema(
   {
     name: String,
@@ -52,9 +52,9 @@ const userSchema = new mongoose.Schema(
 
 const User = mongoose.model("User", userSchema);
 
-// GET users
+// GET userss
 app.get("/api/users", async (req, res) => {
-  const users = await User.find().sort({ createdAt: -1 }).lean();
+  const users = await User.find().sort({ createdAt: -1 }).lean(); //apget sends user data to frontend
   res.json(
     users.map((u) => ({
       _id: u._id,
@@ -72,7 +72,7 @@ app.get("/api/users", async (req, res) => {
 app.post("/api/users", async (req, res) => {
   try {
     const { name, age, gender, phone, address, username, password } = req.body;
-
+    //recives from fronetd saves
     if (!name || !age || !gender || !phone || !address || !username || !password) {
       return res.status(400).json({ error: "All fields required" });
     }
@@ -89,13 +89,13 @@ app.post("/api/users", async (req, res) => {
       passwordHash,
     });
 
-    res.sendStatus(201);
+    res.sendStatus(201); //succesgufl
   } catch (err) {
-    if (err.code === 11000) return res.status(400).json({ error: "Username exists" });
+    if (err.code === 11000) return res.status(400).json({ error: "Username exists" }); //11000 duplicate error -gpt helped a bit
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log("✅ Server on port", PORT));
+app.listen(PORT, () => console.log("Server on port", PORT));

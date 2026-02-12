@@ -1,15 +1,14 @@
 const form = document.getElementById("user-form");
 const tbody = document.querySelector("#user-table tbody");
-
-// Load users from backend
-async function loadUsers() {
-  const res = await fetch("/api/users");
-  const users = await res.json();
+//backend stufffffffer38r3r
+async function loadUsers() { //retrives from backend
+  const res = await fetch("/api/users"); //fetches
+  const users = await res.json(); //becomes json
 
   tbody.innerHTML = "";
 
   for (const u of users) {
-    const tr = document.createElement("tr");
+    const tr = document.createElement("tr"); //create new row for every users
     tr.innerHTML = `
       <td>${u.name}</td>
       <td>${u.phone}</td>
@@ -24,19 +23,19 @@ async function loadUsers() {
 }
 
 // Submit form using fetch
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", async (e) => { //listens for add record
   e.preventDefault();
 
   const data = Object.fromEntries(new FormData(form));
 
-  const res = await fetch("/api/users", {
+  const res = await fetch("/api/users", { //sends to backend
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
   });
 
-  if (!res.ok) {
-    alert("Failed to save user");
+  if (!res.ok) { //check if worked
+    alert("Failedto save user");
     return;
   }
 
@@ -44,5 +43,5 @@ form.addEventListener("submit", async (e) => {
   loadUsers();
 });
 
-// Load users when page loads
+// Loaduser when lods
 loadUsers();
