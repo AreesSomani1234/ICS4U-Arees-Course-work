@@ -7,15 +7,13 @@
     <img :src="image" :alt="product" />
 
     <h3>Variant Colors</h3>
-    <ul>
-      <li
-        v-for="variant in variants"
-        :key="variant.id"
-        @mouseover="updateImage(variant.image)"
-      >
-        {{ variant.color }}
-      </li>
-    </ul>
+    <div
+      v-for="variant in variants"
+      :key="variant.id"
+      class="color-circle"
+      @mouseover="updateImage(variant.image)"
+      :style="{ backgroundColor: variant.color }">
+    </div>
 
     <h3>Sizes</h3>
     <ul>
@@ -24,7 +22,7 @@
 
     <p>Cart: {{ cart }}</p>
 
-    <button @click="addToCart">Add To Cart</button>
+    <<button class="button":class="{ disabledButton: !inStock }":disabled="!inStock" @click="addToCart">Add To Cart</button>
     <button @click="removeFromCart">Remove from Cart</button>
   </div>
 </template>
@@ -43,7 +41,7 @@ const sizes = ref(['S', 'M', 'L', 'XL'])
 const cart = ref(0)
 
 const image = ref(greenSocks) // default image
-
+const inStock = ref(true)
 const variants = ref([
   { id: 2234, color: 'green', image: greenSocks },
   { id: 2235, color: 'blue', image: blueSocks }

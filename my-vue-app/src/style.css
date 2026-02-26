@@ -12,6 +12,13 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.color-circle{
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: inline-block;
+  margin: 6px;
+}
 
 a {
   font-weight: 500;
@@ -56,6 +63,10 @@ button:focus-visible {
 
 .card {
   padding: 2em;
+}
+.disabledButton{
+  background-color: #d8d8d8;
+  cursor: not-allowed;
 }
 
 #app {
