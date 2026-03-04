@@ -1,10 +1,16 @@
 <template>
   <div>
-    <h1>{{ product }}</h1>
+    <h1>{{ title }}</h1>
+
+    <ProductDisplay
+      :premium="premium"
+      @add-to-cart="updateCart"
+      @remove-from-cart="removeItem"
+    />
+
     <p>{{ description }}</p>
 
-    <!-- Product image (changes on hover) -->
-    <img :src="image" :alt="product" />
+    <img :src="image" :alt="product" :class="{ 'out-of-stock-img': !inStock }" />
 
     <h3>Variant Colors</h3>
     <div
@@ -20,39 +26,78 @@
       <li v-for="size in sizes" :key="size">{{ size }}</li>
     </ul>
 
-    <p>Cart: {{ cart }}</p>
+    <p>Cart: {{ cart.length }}</p>
+    <p>{{ saleMessage }}</p>
 
-    <<button class="button":class="{ disabledButton: !inStock }":disabled="!inStock" @click="addToCart">Add To Cart</button>
-    <button @click="removeFromCart">Remove from Cart</button>
+    <!-- Lesson 10 -->
+    <ReviewForm @review-submitted="addReview" />
+
+    <div v-if="reviews.length">
+      <h3>Reviews:</h3>
+      <ul>
+        <li v-for="(r, index) in reviews" :key="index">
+          {{ r.name }} gave {{ r.rating }} stars
+          <br />
+          "{{ r.review }}"
+          <br />
+          Recommended: {{ r.recommend }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
-// ✅ Import images from src/assets (Vite requires this)
+import ProductDisplay from './components/ProductDisplay.vue'
+import ReviewForm from './components/ReviewForm.vue'
+
 import greenSocks from './assets/images/green_socks.jpg'
 import blueSocks from './assets/images/bluesocks.jpg'
 
+const premium = ref(true)
+
+const brand = ref('Vue Mastery')
 const product = ref('Socks')
+
+const title = computed(() => brand.value + ' ' + product.value)
+
 const description = ref('Warm, comfortable socks for everyday wear.')
 const sizes = ref(['S', 'M', 'L', 'XL'])
 
-const cart = ref(0)
+const onSale = ref(true)
+const saleMessage = computed(() =>
+  onSale.value ? `${title.value} is on sale` : `${title.value} is not on sale`
+)
 
-const image = ref(greenSocks) // default image
+/* Lesson 9: cart is an array of product IDs */
+const cart = ref([])
+
+const image = ref(greenSocks)
 const inStock = ref(true)
+
 const variants = ref([
   { id: 2234, color: 'green', image: greenSocks },
   { id: 2235, color: 'blue', image: blueSocks }
 ])
 
-function addToCart() {
-  cart.value += 1
+/* Lesson 10: reviews list */
+const reviews = ref([])
+
+function addReview(review) {
+  reviews.value.push(review)
 }
 
-function removeFromCart() {
-  cart.value -= 1
+function updateCart(id) {
+  cart.value.push(id)
+}
+
+function removeItem(id) {
+  const index = cart.value.indexOf(id)
+  if (index > -1) {
+    cart.value.splice(index, 1)
+  }
 }
 
 function updateImage(variantImage) {
